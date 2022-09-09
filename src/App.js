@@ -1,20 +1,7 @@
-import { useState, useReducer } from "react";
+import { useReducer } from "react";
 import "./App.css";
 
 function App() {
-  const [users, setUsers] = useState([]);
-  const [fname, setFname] = useState("");
-  const [lname, setLname] = useState("");
-  const [email, setEmail] = useState("");
-  const formHandler = (e) => {
-    e.preventDefault();
-    // const newUsers = [...users];
-    // newUsers.push({ fname, lname, email });
-    // setUsers(newUsers);
-    // setFname("");
-    // setLname("");
-    // setEmail("");
-  };
   const initialState = {
     firstName: {
       value: "",
@@ -29,33 +16,37 @@ function App() {
       error: null,
     },
   };
+  function reducer(state, action) {
+    return { ...state, [action.input]: action.value };
+  }
 
+  const [state, dispatch] = useReducer(reducer, initialState);
+  console.log(state);
+
+  function onChange(e) {
+    const action = {
+      input: e.target.name,
+      value: e.target.value,
+    };
+    dispatch(action);
+  }
   return (
     <div className="App">
-      <form action="" className="form" onSubmit={formHandler}>
+      <form action="" className="form">
         <div className="input-group">
           <label htmlFor="">First Name</label>
-          <input
-            type="text"
-            value={fname}
-            onChange={(e) => setFname(e.target.value)}
-          />
+          <input type="text" onChange={onChange} name="firstName" />
         </div>
+        {state.firstName.error !== null && (
+          <p className="error">{state.firstName.error}</p>
+        )}
         <div className="input-group">
           <label htmlFor="">Last Name</label>
-          <input
-            type="text"
-            value={lname}
-            onChange={(e) => setLname(e.target.value)}
-          />
+          <input type="text" onChange={onChange} name="lastName" />
         </div>
         <div className="input-group">
           <label htmlFor="">Email</label>
-          <input
-            type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+          <input type="text" onChange={onChange} name="email " />
         </div>
       </form>
     </div>
